@@ -1,0 +1,30 @@
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <numeric>
+
+#include "UdodConstants.h"
+
+// #include "HepMC/SimpleVector.h"
+// #include "UdodFinalState.h"
+
+#include "UdodChannelEE.h"
+//#include "CkTable.h"
+#include "Udod.h"
+
+using namespace std;
+using namespace UDOD;
+
+UdodChannelEE::UdodChannelEE(Udod* p):UdodChannelBase(p)
+{  
+  name="e+ e- -> e+ e- g g -> e+ e- e+ e-";
+  vector<double> Mlepton(2);
+  Mlepton[0] = Mlepton[1] = me;
+  Initialize(Mlepton);
+  cout << "EE created\n";
+}
+
+double UdodChannelEE::Sigma_gg_toX(double W, double theta)
+{
+  return 1.;
+}

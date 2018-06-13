@@ -1,0 +1,25 @@
+#include <cmath>
+#include <iostream>
+#include <vector>
+
+#include "UdodChannelTauTau.h"
+#include "CkTable.h"
+#include "Udod.h"
+#include "UdodConstants.h"
+
+using namespace std;
+using namespace UDOD;
+
+UdodChannelTauTau::UdodChannelTauTau(Udod* p):UdodChannelBase(p)
+{  
+  name="e+ e- -> e+ e- g g -> e+ e- tau+ tau-";
+  vector<double> Mlepton(2);
+  Mlepton[0] = Mlepton[1] = mtau;
+  Initialize(Mlepton);
+  cout << "TauTau created\n";
+}
+
+double UdodChannelTauTau::Sigma_gg_toX(double W, double theta)
+{
+  return 3.;
+}

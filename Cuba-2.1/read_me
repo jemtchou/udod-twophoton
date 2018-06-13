@@ -1,0 +1,5 @@
+This is stripped (minimal) version of Cuba-2.1.
+ 1) All config*, makefile*, demo and etc. stuff is removed.
+ 2) config.h is taken in most general form for gcc compiler.
+ 3) compile only generic version of functions 
+    (remove building ll* *_ and ll*_ versions)

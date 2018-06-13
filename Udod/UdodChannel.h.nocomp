@@ -1,0 +1,44 @@
+#ifndef UdodChannel_h
+#define UdodChannel_h
+
+#include <vector>
+
+class CkTable;
+
+namespace UDOD
+{
+   class Udod;
+
+   class UdodChannel
+   {
+      public:
+         UdodChannel(std::vector<double>& Mass, Udod* p);
+         ~UdodChannel();
+
+         unsigned int GetNparticles() {
+            return npart;
+         }
+         double Randomizer();
+
+         void CouplesProduction();
+         void KProcedure();
+         void Decay(unsigned int mode) {
+            switch( mode ) {
+               case 1: CouplesProduction(); break;
+               case 2: KProcedure(); break;
+            }
+         }
+
+         void ShowResults();
+
+      private:
+         Udod* parent;
+
+         unsigned int npart; // Number of particles in decay
+         std::vector<double> mass_v; // Masses of particles (first index is 1)
+
+         std::vector<CkTable*> tbls; // tables of integrals
+   };
+};
+
+#endif

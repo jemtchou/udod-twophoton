@@ -1,0 +1,101 @@
+#include <cmath>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <numeric>
+
+
+// #include "HepMC/SimpleVector.h"
+// #include "UdodFinalState.h"
+
+#include "UdodChannelMuMu.h"
+#include "CkTable.h"
+#include "Udod.h"
+#include "UdodConstants.h"
+
+using namespace std;
+using namespace UDOD;
+
+UdodChannelMuMu::UdodChannelMuMu(Udod* p):UdodChannelBase(p)
+{  
+  name="e+ e- -> e+ e- g g -> e+ e- mu+ mu-";
+  vector<double> Mlepton(2);
+  Mlepton[0] = Mlepton[1] = mmu;
+  Initialize(Mlepton);
+  cout << "MuMu created\n";
+}
+
+double UdodChannelMuMu::Sigma_gg_toX(double W, double theta)
+{
+  return 1.;
+}
+
+// Budnev, pp.274-275
+double UdodChannelMuMu::sigTT(double w, double t1, double t2)
+{
+  long double q12 = 0.5*w*w-0.5*t1-0.5*t2;
+  long double x  = (q12*q12-t1*t2)/w/w;
+  long double T  = 4.*mmu2*x+t1*t2;
+  long double deltat  = 2.*sqrt(x*(w*w-4.*mmu2));
+  long double L  = log((q12+0.5*deltat)*(q12+0.5*deltat)/(4.*mmu2*x+t1*t2));
+  
+  long double sig = pi*alpha*alpha/w/w/x*(q12*L*(2.+2.*mmu2/x-4.*mmu2*mmu2/q12/q12+(t1+t2)/x+0.5*t1*t2*w*w/x/q12/q12+0.75*t1*t1*t2*t2/x/x/q12/q12) - deltat*(1+mmu2/x+(t1+t2)/x +t1*t2/T+0.75*t1*t2/x/x));
+ 
+  return sig; // GeV^-2
+}
+
+double UdodChannelMuMu::sigTS(double w, double t1, double t2)
+{
+  double q12 = 0.5*w*w-0.5*t1-0.5*t2;
+  double x  = (q12*q12-t1*t2)/w/w;
+  double T  = 4.*mmu2*x+t1*t2;
+  double deltat  = 2.*sqrt(x*(w*w-4.*mmu2));
+  double L  = log((q12+0.5*deltat)*(q12+0.5*deltat)/(4.*mmu2*x+t1*t2));
+    
+  double sig = -pi*alpha*alpha*t2/w/w/x/x*(deltat*(1.+t1/T*(6.*mmu2+t1+1.5*t1*t2/x))-L/q12*(4.*mmu2*x+t1*(w*w+2.*mmu2)+t1*(t1+t2+1.5*t1*t2/x)));
+
+  return sig;
+}
+
+double UdodChannelMuMu::sigSS(double w, double t1, double t2)
+{
+  double q12 = 0.5*w*w-0.5*t1-0.5*t2;
+  double x  = (q12*q12-t1*t2)/w/w;
+  double T  = 4.*mmu2*x+t1*t2;
+  double deltat  = 2.*sqrt(x*(w*w-4.*mmu2));
+  double L  = log((q12+0.5*deltat)*(q12+0.5*deltat)/(4.*mmu2*x+t1*t2));
+
+  double sig = pi*alpha*alpha*t1*t2/w/w/x/x/x*(L/q12*(2.*w*w*x+3.*t1*t2)-deltat*(2.+t1*t2/T));
+  
+  return sig;
+}
+
+double UdodChannelMuMu::tauTS(double w, double t1, double t2)
+{
+  double q12 = 0.5*w*w-0.5*t1-0.5*t2;
+  double x  = (q12*q12-t1*t2)/w/w;
+  //  double T  = 4.*mmu2*x+t1*t2;
+  double deltat  = 2.*sqrt(x*(w*w-4.*mmu2));
+  double L  = log((q12+0.5*deltat)*(q12+0.5*deltat)/(4.*mmu2*x+t1*t2));
+
+  double sig = -pi*alpha*alpha*sqrt(t1*t2)/w/w/x/x*(L*(2.*mmu2+t1+t2+1.5*t1*t2/x)+deltat*(2.-1.5*q12/x));
+  
+  return sig;
+}
+
+double UdodChannelMuMu::tauTT(double w, double t1, double t2)
+{
+  double q12 = 0.5*w*w-0.5*t1-0.5*t2;
+  double x  = (q12*q12-t1*t2)/w/w;
+  //  double T  = 4.*mmu2*x+t1*t2;
+  double deltat  = 2.*sqrt(x*(w*w-4.*mmu2));
+  double L  = log((q12+0.5*deltat)*(q12+0.5*deltat)/(4.*mmu2*x+t1*t2));
+
+ // #-0.25D0*pi*alpha**2/w**2/x*(2.D0*Dt/x*(2.D0*m**2+(t1-t2)**2/w
+ //     #**2+0.15E1*t1*t2/x)+Ll/q12*(16.D0*m**4-16.D0*m**2*(t1+t2)-4.D0*t1*
+ //     #t2*(2.D0+2.D0*m**2/x+(t1+t2)/x+0.75D0*t1*t2/x**2)))
+
+  double sig = -0.25*pi*alpha*alpha/w/w/x*(2.*deltat/x*(2.*mmu2+(t1-t2)*(t1-t2)/w/w+1.5*t1*t2/x)+L/q12*(16.*mmu2*mmu2-16.*mmu2*(t1+t2)-4.*t1*t2*(2.+2.*mmu2/x+(t1+t2)/x+0.75*t1*t2/x/x)));
+
+  return sig;
+}

@@ -1,0 +1,23 @@
+#ifndef UdodChannelTauTau_h
+#define UdodChannelTauTau_h
+
+#include <iostream>
+#include "UdodChannelBase.h"
+
+namespace UDOD{
+
+class UdodChannelTauTau: public UdodChannelBase
+{
+ public:
+  UdodChannelTauTau(Udod* p);
+  double Sigma_gg_toX(double W, double theta);
+  double Integrand(const double xx[]) {std::cout << "Integ TauTau" << std::endl; return 3;};
+  virtual double sigTT(double w, double t1, double t2){return 0;};
+  virtual double sigTS(double w, double t1, double t2){return 0;};
+  virtual double sigSS(double w, double t1, double t2){return 0;};
+  virtual double tauTS(double w, double t1, double t2){return 0;};
+  virtual double tauTT(double w, double t1, double t2){return 0;};
+};
+}
+
+#endif
